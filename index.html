@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💌 សារជូនពរថ្ងៃពិសេសជូនបងទាំងពីរ</title>
+
+  <!-- Open Graph សម្រាប់បង្ហាញ Preview ស្អាតពេលផ្ញើ Link ក្នុង Messenger -->
+  <meta property="og:title" content="💌 មានសំបុត្រជូនពរពិសេសជូនបងទាំងពីរ!" />
+  <meta property="og:description" content="ចុចបើកស្រោមសំបុត្រដើម្បីអានសារជូនពរ និងស្តាប់ភ្លេងអបអរពីប្អូន Willy & NiKa 🎁✨" />
+  <meta property="og:type" content="website" />
+
+  <!-- Google Fonts សម្រាប់អក្សរខ្មែរ (Moul & Battambang) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Moul&display=swap" rel="stylesheet" />
+
+  <!-- Library បាញ់ក្រដាសពណ៌ (Confetti) -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg-cream: #fdf6f0;
+      --primary-rose: #8b1e3f;
+      --secondary-rose: #b83b5e;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+      --env-body: #f5e6d3;
+      --env-flap: #edd5b8;
+      --env-pocket: #e6c7a3;
+      --text-dark: #3b282c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #fffaf6 0%, #f7e6dc 100%);
+      font-family: 'Battambang', 'Khmer OS Battambang', sans-serif;
+      color: var(--text-dark);
+      overflow-x: hidden;
+      padding: 20px;
+    }
+
+    /* ប៊ូតុងបិទ/បើកសំឡេងភ្លេង */
+    .music-toggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 50;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--primary-rose);
+      border: 1.5px solid var(--gold);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-family: 'Battambang', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(139, 30, 63, 0.14);
+      backdrop-filter: blur(6px);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .music-toggle.visible {
+      display: inline-flex;
+    }
+
+    .music-toggle:hover {
+      transform: translateY(-2px);
+      background: #fff;
+    }
+
+    .music-bars {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 12px;
+    }
+
+    .music-bars span {
+      width: 3px;
+      background: var(--primary-rose);
+      border-radius: 2px;
+      animation: soundWave 0.9s infinite ease-in-out;
+    }
+
+    .music-bars span:nth-child(2) { animation-delay: 0.2s; }
+    .music-bars span:nth-child(3) { animation-delay: 0.4s; }
+
+    .music-toggle.muted .music-bars span {
+      animation: none;
+      height: 4px !important;
+      opacity: 0.45;
+    }
+
+    @keyframes soundWave {
+      0%, 100% { height: 4px; }
+      50% { height: 12px; }
+    }
+
+    /* ផ្នែកស្រោមសំបុត្រ */
+    .stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .stage.hidden {
+      opacity: 0;
+      transform: scale(0.9);
+      pointer-events: none;
+      position: absolute;
+    }
+
+    .hint-text {
+      margin-bottom: 28px;
+      font-size: 1.05rem;
+      color: var(--primary-rose);
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.88);
+      padding: 8px 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      box-shadow: 0 4px 15px rgba(139, 30, 63, 0.08);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .envelope-wrapper {
+      position: relative;
+      width: 320px;
+      height: 210px;
+      background: var(--env-body);
+      border-radius: 8px;
+      box-shadow: 0 18px 40px rgba(92, 43, 53, 0.2);
+      cursor: pointer;
+      perspective: 1000px;
+      transition: transform 0.3s ease;
+    }
+
+    .envelope-wrapper:hover {
+      transform: translateY(-4px);
+    }
+
+    /* ក្រដាសសំបុត្រខាងក្នុង */
+    .letter-slip {
+      position: absolute;
+      bottom: 10px;
+      left: 15px;
+      width: 290px;
+      height: 185px;
+      background: #ffffff;
+      border-radius: 6px;
+      border: 1.5px solid var(--gold);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      text-align: center;
+      z-index: 2;
+      transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .letter-slip h3 {
+      font-family: 'Moul', 'Khmer OS Moul Light', serif;
+      font-size: 0.9rem;
+      color: var(--primary-rose);
+      margin-bottom: 6px;
+    }
+
+    .letter-slip p {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    /* ហោប៉ៅខាងមុខស្រោមសំបុត្រ */
+    .envelope-front {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .envelope-front::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-left: 160px solid var(--env-pocket);
+      border-right: 160px solid var(--env-pocket);
+      border-top: 105px solid transparent;
+      border-bottom: 105px solid #dec09b;
+      border-radius: 8px;
+    }
+
+    /* គម្របស្រោមសំបុត្រខាងលើ */
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 160px solid transparent;
+      border-right: 160px solid transparent;
+      border-top: 120px solid var(--env-flap);
+      transform-origin: top center;
+      transition: transform 0.6s ease, z-index 0.2s ease;
+      z-index: 4;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.08));
+    }
+
+    /* ត្រាក្រមួនពណ៌មាស */
+    .wax-seal {
+      position: absolute;
+      top: 92px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 54px;
+      height: 54px;
+      background: radial-gradient(circle at 30% 30%, #f5d76e, #b8860b);
+      border-radius: 50%;
+      border: 3px solid #fff3c4;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      z-index: 5;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    /* ចលនាពេលចុចបើក */
+    .envelope-wrapper.open .wax-seal {
+      opacity: 0;
+      transform: translateX(-50%) scale(1.4);
+    }
+
+    .envelope-wrapper.open .envelope-flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    .envelope-wrapper.open .letter-slip {
+      transform: translateY(-95px);
+    }
+
+    /* កាតជូនពរពេញអេក្រង់ក្រោយបើករួច */
+    .greeting-card {
+      display: none;
+      max-width: 520px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 32px 26px;
+      margin-top: 34px;
+      box-shadow: 0 20px 50px rgba(139, 30, 63, 0.15);
+      border: 2px solid var(--gold);
+      position: relative;
+      text-align: center;
+      animation: cardReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .greeting-card.visible {
+      display: block;
+    }
+
+    @keyframes cardReveal {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .card-corner {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-family: 'Moul', 'Khmer OS Moul Light', serif;
+      font-size: 1.35rem;
+      color: var(--primary-rose);
+      line-height: 1.7;
+      margin-bottom: 6px;
+    }
+
+    .card-subtitle {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #a67c00;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed rgba(212, 175, 55, 0.6);
+    }
+
+    .card-message {
+      font-size: 1.02rem;
+      line-height: 1.95;
+      color: var(--text-dark);
+      text-align: left;
+      background: #fffaf7;
+      padding: 18px;
+      border-radius: 12px;
+      border-left: 4px solid var(--secondary-rose);
+      margin-bottom: 22px;
+    }
+
+    .card-message p + p {
+      margin-top: 12px;
+    }
+
+    .card-signature {
+      text-align: right;
+      font-size: 0.98rem;
+      color: var(--primary-rose);
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
+
+    .replay-btn {
+      background: linear-gradient(135deg, var(--primary-rose), var(--secondary-rose));
+      color: #fff;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-family: 'Battambang', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(139, 30, 63, 0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .replay-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(139, 30, 63, 0.35);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ប៊ូតុងគ្រប់គ្រងភ្លេង -->
+  <button class="music-toggle" id="musicToggle" onclick="toggleMusic()" aria-label="បិទ ឬ បើកភ្លេង">
+    <span class="music-bars"><span></span><span></span><span></span></span>
+    <span id="musicLabel">កំពុងចាក់ភ្លេង</span>
+  </button>
+
+  <!-- ដំណាក់កាលទី ១៖ ស្រោមសំបុត្រ -->
+  <div class="stage" id="envelopeStage">
+    <div class="hint-text">ចុចលើស្រោមសំបុត្រដើម្បីបើក 💌🎶</div>
+    <div class="envelope-wrapper" id="envelope" onclick="openEnvelope()">
+      <div class="envelope-flap"></div>
+      <div class="wax-seal">❤️</div>
+      <div class="letter-slip">
+        <h3>សិរីមង្គលអាពាហ៍ពិពាហ៍</h3>
+        <p>សារជូនពរពិសេសជូនបងទាំងពីរ ✨</p>
+      </div>
+      <div class="envelope-front"></div>
+    </div>
+  </div>
+
+  <!-- ដំណាក់កាលទី ២៖ កាតជូនពរពេញលេញ -->
+  <div class="greeting-card" id="greetingCard">
+    <div class="card-corner">💐🥂💍</div>
+    <h1 class="card-title">សិរីមង្គលអាពាហ៍ពិពាហ៍</h1>
+    <div class="card-subtitle">ជូនចំពោះ បងទាំងពីរ</div>
+
+    <div class="card-message">
+      <p>
+        សូមអធ្យាស្រ័យផងបង 🙏 ដែលប្អូនមិនបានចូលរួមអបអរសាទរក្នុងថ្ងៃពិសេសរបស់បងទាំងពីរដោយផ្ទាល់ ដោយសារជាប់ការងារ ហើយសុំច្បាប់ឈប់សម្រាកបន្ថែមទៀតមិនបាន 💼។
+      </p>
+      <p>
+        ទោះមិនបានទៅចូលរួម ក៏ប្អូនសូមផ្ញើក្តីនឹករលឹក ❤️ និងសូមជូនពរបងទាំងពីរឱ្យស្រឡាញ់គ្នាដល់ចាស់កោងខ្នង 👫 មានសុភមង្គលក្នុងក្រុមគ្រួសារ 🏡 ជោគជ័យគ្រប់ភារកិច្ច ✨ និងឆាប់ទទួលបានសមាជិកថ្មីក្នុងពេលឆាប់ៗនេះណាបង! 🥂🎉💐
+      </p>
+    </div>
+
+    <div class="card-signature">
+      ដោយក្តីគោរព និងស្រឡាញ់រាប់អានពីប្អូន<br />
+      — Willy &amp; NiKa 🤍
+    </div>
+
+    <button class="replay-btn" onclick="launchConfetti()">បាញ់ក្រដាសពណ៌អបអរម្តងទៀត 🎉</button>
+  </div>
+
+  <script>
+    let isOpened = false;
+    let audioCtx = null;
+    let masterGain = null;
+    let isMuted = false;
+    let melodyTimer = null;
+
+    // បម្លែងលេខ MIDI ទៅជាប្រេកង់សំឡេង (Hz)
+    function midiToFreq(midi) {
+      return 440 * Math.pow(2, (midi - 69) / 12);
+    }
+
+    // បង្កើតសំឡេងព្យាណូ និងប្រអប់តន្ត្រីស្រទន់ៗ
+    function playSoftNote(midi, startTime, duration, volume = 0.22) {
+      if (!audioCtx || !masterGain) return;
+
+      const osc1 = audioCtx.createOscillator();
+      const osc2 = audioCtx.createOscillator();
+      const filter = audioCtx.createBiquadFilter();
+      const noteGain = audioCtx.createGain();
+
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(midiToFreq(midi), startTime);
+
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(midiToFreq(midi + 12), startTime);
+
+      const overtoneGain = audioCtx.createGain();
+      overtoneGain.gain.setValueAtTime(0.08, startTime);
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(1400, startTime);
+
+      noteGain.gain.setValueAtTime(0.0001, startTime);
+      noteGain.gain.linearRampToValueAtTime(volume, startTime + 0.045);
+      noteGain.gain.exponentialRampToValueAtTime(volume * 0.45, startTime + duration * 0.5);
+      noteGain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration + 0.9);
+
+      osc1.connect(filter);
+      osc2.connect(overtoneGain);
+      overtoneGain.connect(filter);
+      filter.connect(noteGain);
+      noteGain.connect(masterGain);
+
+      osc1.start(startTime);
+      osc2.start(startTime);
+      osc1.stop(startTime + duration + 1.0);
+      osc2.stop(startTime + duration + 1.0);
+    }
+
+    // សំឡេងកណ្តឹងអបអរភ្លាមៗពេលចុចបើកស្រោមសំបុត្រ
+    function playOpeningChime() {
+      const now = audioCtx.currentTime;
+      const chimeNotes = [74, 78, 81, 86]; // D5, F#5, A5, D6
+      chimeNotes.forEach((note, idx) => {
+        playSoftNote(note, now + idx * 0.11, 1.4, 0.24);
+      });
+    }
+
+    // លេងបទភ្លេងមង្គលការ Canon in D (16 វិនាទីក្នុងមួយជុំ)
+    function scheduleWeddingMelody() {
+      if (!audioCtx || isMuted) return;
+
+      const t0 = audioCtx.currentTime + 0.05;
+      const beat = 0.5;
+
+      const progression = [
+        { bass: 50, arp: [57, 62, 66], mel: [78, 76] },
+        { bass: 45, arp: [52, 57, 61], mel: [74, 73] },
+        { bass: 47, arp: [54, 59, 62], mel: [71, 69] },
+        { bass: 42, arp: [49, 54, 57], mel: [71, 73] },
+        { bass: 43, arp: [50, 55, 59], mel: [74, 78] },
+        { bass: 50, arp: [57, 62, 66], mel: [81, 79] },
+        { bass: 43, arp: [50, 55, 59], mel: [78, 74] },
+        { bass: 45, arp: [52, 57, 61], mel: [76, 73] }
+      ];
+
+      progression.forEach((bar, barIdx) => {
+        const barStart = t0 + barIdx * (beat * 4);
+
+        playSoftNote(bar.bass, barStart, beat * 3.6, 0.18);
+
+        bar.arp.forEach((arpNote, i) => {
+          playSoftNote(arpNote, barStart + (i + 1) * beat, beat * 2.2, 0.13);
+        });
+
+        playSoftNote(bar.mel[0], barStart, beat * 2.1, 0.25);
+        playSoftNote(bar.mel[1], barStart + beat * 2, beat * 2.1, 0.23);
+      });
+    }
+
+    function startWeddingMusic() {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return;
+
+      if (!audioCtx) {
+        audioCtx = new AudioContextClass();
+        masterGain = audioCtx.createGain();
+        masterGain.gain.setValueAtTime(0.65, audioCtx.currentTime);
+        masterGain.connect(audioCtx.destination);
+      }
+
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      playOpeningChime();
+
+      setTimeout(() => {
+        scheduleWeddingMelody();
+        melodyTimer = setInterval(scheduleWeddingMelody, 16000);
+      }, 650);
+
+      document.getElementById('musicToggle').classList.add('visible');
+    }
+
+    function toggleMusic() {
+      if (!audioCtx || !masterGain) return;
+
+      const btn = document.getElementById('musicToggle');
+      const label = document.getElementById('musicLabel');
+      isMuted = !isMuted;
+
+      if (isMuted) {
+        masterGain.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.08);
+        btn.classList.add('muted');
+        label.textContent = 'បិទសំឡេង';
+      } else {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        masterGain.gain.setTargetAtTime(0.65, audioCtx.currentTime, 0.1);
+        btn.classList.remove('muted');
+        label.textContent = 'កំពុងចាក់ភ្លេង';
+        scheduleWeddingMelody();
+      }
+    }
+
+    function launchConfetti() {
+      if (typeof confetti !== 'function') return;
+
+      const colors = ['#8b1e3f', '#d4af37', '#ff6b8b', '#ffd700', '#ffffff'];
+
+      confetti({
+        particleCount: 90,
+        spread: 75,
+        origin: { y: 0.6 },
+        colors: colors
+      });
+
+      setTimeout(() => {
+        confetti({
+          particleCount: 60,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: colors
+        });
+        confetti({
+          particleCount: 60,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: colors
+        });
+      }, 250);
+    }
+
+    function openEnvelope() {
+      if (isOpened) return;
+      isOpened = true;
+
+      startWeddingMusic();
+
+      const envelope = document.getElementById('envelope');
+      const stage = document.getElementById('envelopeStage');
+      const card = document.getElementById('greetingCard');
+
+      envelope.classList.add('open');
+      launchConfetti();
+
+      setTimeout(() => {
+        stage.classList.add('hidden');
+        card.classList.add('visible');
+        launchConfetti();
+      }, 1100);
+    }
+  </script>
+</body>
+</html>
