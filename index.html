@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>💌 សារជូនពរថ្ងៃពិសេសជូនបងទាំងពីរ</title>
+  <title>💌 សារជូនពរ និងចំណងដៃជូនបងទាំងពីរ</title>
 
   <!-- Open Graph សម្រាប់បង្ហាញ Preview ស្អាតពេលផ្ញើ Link ក្នុង Messenger -->
-  <meta property="og:title" content="💌 មានសំបុត្រជូនពរពិសេសជូនបងទាំងពីរ!" />
-  <meta property="og:description" content="ចុចបើកស្រោមសំបុត្រដើម្បីអានសារជូនពរ និងស្តាប់ភ្លេងអបអរពីប្អូន Willy & NiKa 🎁✨" />
+  <meta property="og:title" content="💌 សំបុត្រជូនពរ និងចំណងដៃពិសេសជូនបងទាំងពីរ!" />
+  <meta property="og:description" content="ចុចបើកស្រោមសំបុត្រដើម្បីអានសារជូនពរ និងទទួលចំណងដៃពីប្អូន Willy & NiKa 🎁✨" />
   <meta property="og:type" content="website" />
 
   <!-- Google Fonts សម្រាប់អក្សរខ្មែរ (Moul & Battambang) -->
@@ -29,6 +29,7 @@
       --env-flap: #edd5b8;
       --env-pocket: #e6c7a3;
       --text-dark: #3b282c;
+      --aba-teal: #005e7c;
     }
 
     * {
@@ -269,8 +270,8 @@
       width: 100%;
       background: #ffffff;
       border-radius: 18px;
-      padding: 32px 26px;
-      margin-top: 34px;
+      padding: 30px 22px;
+      margin-top: 38px;
       box-shadow: 0 20px 50px rgba(139, 30, 63, 0.15);
       border: 2px solid var(--gold);
       position: relative;
@@ -295,48 +296,158 @@
 
     .card-corner {
       font-size: 1.6rem;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .card-title {
       font-family: 'Moul', 'Khmer OS Moul Light', serif;
-      font-size: 1.35rem;
+      font-size: 1.3rem;
       color: var(--primary-rose);
       line-height: 1.7;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .card-subtitle {
       font-size: 1rem;
       font-weight: 700;
       color: #a67c00;
-      margin-bottom: 18px;
-      padding-bottom: 14px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
       border-bottom: 1px dashed rgba(212, 175, 55, 0.6);
     }
 
     .card-message {
-      font-size: 1.02rem;
-      line-height: 1.95;
+      font-size: 0.98rem;
+      line-height: 1.9;
       color: var(--text-dark);
       text-align: left;
       background: #fffaf7;
-      padding: 18px;
+      padding: 16px;
       border-radius: 12px;
       border-left: 4px solid var(--secondary-rose);
-      margin-bottom: 22px;
+      margin-bottom: 18px;
     }
 
     .card-message p + p {
-      margin-top: 12px;
+      margin-top: 10px;
+    }
+
+    /* ផ្នែកបង្កាន់ដៃចំណងដៃ (Gift Receipt Ticket) */
+    .gift-ticket {
+      position: relative;
+      background: linear-gradient(145deg, #fffdf9 0%, #fcf4e8 100%);
+      border: 1.5px solid var(--gold);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 20px;
+      text-align: left;
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.14);
+    }
+
+    .gift-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1.5px dashed rgba(212, 175, 55, 0.65);
+      position: relative;
+    }
+
+    /* ស្នាមកាត់សំបុត្រឆ្វេងស្តាំ */
+    .gift-header::before,
+    .gift-header::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      width: 14px;
+      height: 14px;
+      background: #ffffff;
+      border-radius: 50%;
+      border: 1.5px solid var(--gold);
+    }
+
+    .gift-header::before { left: -24px; }
+    .gift-header::after { right: -24px; }
+
+    .gift-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--primary-rose);
+    }
+
+    .aba-tag {
+      background: var(--aba-teal);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .gift-amount-box {
+      text-align: center;
+      padding: 14px 0 10px;
+    }
+
+    .gift-amount-label {
+      font-size: 0.82rem;
+      color: #7a6652;
+    }
+
+    .gift-amount {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--primary-rose);
+      letter-spacing: 0.5px;
+      line-height: 1.3;
+    }
+
+    .gift-recipient {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--aba-teal);
+      margin-top: 2px;
+    }
+
+    .gift-rows {
+      margin-top: 8px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(212, 175, 55, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.83rem;
+    }
+
+    .gift-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .gift-row span:first-child {
+      color: #777;
+      white-space: nowrap;
+    }
+
+    .gift-row span:last-child {
+      font-weight: 700;
+      color: var(--text-dark);
+      text-align: right;
+      word-break: break-word;
     }
 
     .card-signature {
       text-align: right;
-      font-size: 0.98rem;
+      font-size: 0.96rem;
       color: var(--primary-rose);
       font-weight: 700;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     .replay-btn {
@@ -375,7 +486,7 @@
       <div class="wax-seal">❤️</div>
       <div class="letter-slip">
         <h3>សិរីមង្គលអាពាហ៍ពិពាហ៍</h3>
-        <p>សារជូនពរពិសេសជូនបងទាំងពីរ ✨</p>
+        <p>សារជូនពរ និងចំណងដៃជូនបងទាំងពីរ ✨</p>
       </div>
       <div class="envelope-front"></div>
     </div>
@@ -385,8 +496,11 @@
   <div class="greeting-card" id="greetingCard">
     <div class="card-corner">💐🥂💍</div>
     <h1 class="card-title">សិរីមង្គលអាពាហ៍ពិពាហ៍</h1>
-    <div class="card-subtitle">ជូនចំពោះ បងទាំងពីរ</div>
 
+    <!-- ១. អាចកែឈ្មោះអ្នកទទួលនៅទីនេះ -->
+    <div class="card-subtitle">ជូនចំពោះ បងទាំងពីរ (NITA SOVAT)</div>
+
+    <!-- ២. អាចកែខ្លឹមសារជូនពរនៅទីនេះ -->
     <div class="card-message">
       <p>
         សូមអធ្យាស្រ័យផងបង 🙏 ដែលប្អូនមិនបានចូលរួមអបអរសាទរក្នុងថ្ងៃពិសេសរបស់បងទាំងពីរដោយផ្ទាល់ ដោយសារជាប់ការងារ ហើយសុំច្បាប់ឈប់សម្រាកបន្ថែមទៀតមិនបាន 💼។
@@ -396,6 +510,40 @@
       </p>
     </div>
 
+    <!-- ៣. សន្លឹកបង្កាន់ដៃចំណងដៃ (អាចកែព័ត៌មាននៅទីនេះ) -->
+    <div class="gift-ticket">
+      <div class="gift-header">
+        <span class="gift-badge">🎁 ចំណងដៃអាពាហ៍ពិពាហ៍</span>
+        <span class="aba-tag">ABA TRANSFER</span>
+      </div>
+
+      <div class="gift-amount-box">
+        <div class="gift-amount-label">ទឹកប្រាក់ចំណងដៃ</div>
+        <div class="gift-amount">$70.00 USD</div>
+        <div class="gift-recipient">ជូនទៅ៖ NITA SOVAT</div>
+      </div>
+
+      <div class="gift-rows">
+        <div class="gift-row">
+          <span>ផ្ញើពី៖</span>
+          <span>SOWATH WILLY &amp; NiKa</span>
+        </div>
+        <div class="gift-row">
+          <span>លេខប្រតិបត្តិការ (Trx. ID)៖</span>
+          <span>65452735151</span>
+        </div>
+        <div class="gift-row">
+          <span>លេខយោង (Ref #)៖</span>
+          <span>100FT40446706547</span>
+        </div>
+        <div class="gift-row">
+          <span>កាលបរិច្ឆេទ៖</span>
+          <span>Nov 19, 2026 • 09:59 PM</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ៤. អាចកែហត្ថលេខាអ្នកផ្ញើនៅទីនេះ -->
     <div class="card-signature">
       ដោយក្តីគោរព និងស្រឡាញ់រាប់អានពីប្អូន<br />
       — Willy &amp; NiKa 🤍
@@ -411,12 +559,10 @@
     let isMuted = false;
     let melodyTimer = null;
 
-    // បម្លែងលេខ MIDI ទៅជាប្រេកង់សំឡេង (Hz)
     function midiToFreq(midi) {
       return 440 * Math.pow(2, (midi - 69) / 12);
     }
 
-    // បង្កើតសំឡេងព្យាណូ និងប្រអប់តន្ត្រីស្រទន់ៗ
     function playSoftNote(midi, startTime, duration, volume = 0.22) {
       if (!audioCtx || !masterGain) return;
 
@@ -454,16 +600,14 @@
       osc2.stop(startTime + duration + 1.0);
     }
 
-    // សំឡេងកណ្តឹងអបអរភ្លាមៗពេលចុចបើកស្រោមសំបុត្រ
     function playOpeningChime() {
       const now = audioCtx.currentTime;
-      const chimeNotes = [74, 78, 81, 86]; // D5, F#5, A5, D6
+      const chimeNotes = [74, 78, 81, 86];
       chimeNotes.forEach((note, idx) => {
         playSoftNote(note, now + idx * 0.11, 1.4, 0.24);
       });
     }
 
-    // លេងបទភ្លេងមង្គលការ Canon in D (16 វិនាទីក្នុងមួយជុំ)
     function scheduleWeddingMelody() {
       if (!audioCtx || isMuted) return;
 
